@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>uos-arm64-pyqt-packaging 使用说明</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [], displayMath: [['$$', '$$']], processEscapes: false },
+  options: { ignoreHtmlClass: 'no-math' },
+  startup: { ready: () => { MathJax.startup.defaultReady(); } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+  :root {
+    --bg:#15171e; --bg2:#1b1e28; --card:#1f2330; --border:#2d3342;
+    --text:#d5d9e3; --text-dim:#9aa3b5;
+    --accent:#7aa2f7; --accent2:#9ece6a; --src:#565f89; --math:#bb9af7;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+    line-height:1.75; font-size:16px;
+  }
+  header.topbar {
+    position:sticky; top:0; z-index:10;
+    background:linear-gradient(90deg,#1b1e28,#232838);
+    border-bottom:1px solid var(--border);
+    padding:12px 24px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  }
+  header.topbar h1 { margin:0; font-size:17px; font-weight:600; color:#e8ebf4; letter-spacing:.5px; }
+  header.topbar .sub { color:var(--text-dim); font-size:13px; }
+  main { max-width:920px; margin:0 auto; padding:28px 24px 80px; }
+  h1 { font-size:26px; color:#e8ebf4; margin:36px 0 12px; }
+  h1:first-child { margin-top:8px; }
+  h2 { font-size:21px; color:var(--accent); border-left:4px solid var(--accent);
+       padding-left:12px; margin:42px 0 14px; }
+  h3 { font-size:17px; color:var(--accent2); margin:30px 0 10px; }
+  h4 { font-size:15.5px; color:#e0af68; margin:24px 0 8px; }
+  p { margin:10px 0; }
+  a { color:var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  blockquote { margin:12px 0; padding:10px 16px; background:var(--bg2);
+       border-left:3px solid var(--src); color:var(--text-dim); border-radius:0 8px 8px 0; }
+  hr { border:none; border-top:1px solid var(--border); margin:34px 0; }
+  p > strong:first-child { color:var(--src); font-size:13px; letter-spacing:.4px; }
+  table { border-collapse:collapse; width:100%; margin:14px 0; font-size:13.5px;
+       background:var(--card); border-radius:8px; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--border); padding:7px 10px; text-align:left; vertical-align:top; }
+  th { background:#262c3d; color:#c8d3f5; font-weight:600; white-space:nowrap; }
+  tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+  img { max-width:100%; height:auto; display:block; margin:14px auto;
+       border:1px solid var(--border); border-radius:10px; background:#fff;
+       padding:6px; box-shadow:0 4px 18px rgba(0,0,0,.35); }
+  mjx-container { color:var(--math) !important; margin:16px 0 !important; }
+  code { background:#262c3d; color:#7dcfff; padding:2px 6px; border-radius:4px; font-size:.92em; }
+  pre { background:#1f2330; padding:12px 14px; border-radius:8px; overflow-x:auto;
+       border:1px solid var(--border); }
+  pre code { background:none; padding:0; }
+  ul, ol { padding-left:26px; }
+  li { margin:4px 0; }
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-thumb { background:#333a4d; border-radius:5px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  @media (max-width:640px) { main{padding:18px 14px 60px;} body{font-size:15px;} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <h1>uos-arm64-pyqt-packaging 使用说明</h1>
+  <span class="sub">统信 UOS 20 arm64 PyQt 应用打包 · v1.0.0 · MIT</span>
+</header>
+<main>
+<h1>uos-arm64-pyqt-packaging</h1>
+<blockquote>
+<p>把 PyQt（或纯 Python）桌面应用，打包成能在 <strong>统信 UOS 20 arm64（glibc 2.28 / Python 3.7）</strong> 上直接安装、双击运行的 <code>.deb</code>。
+它既是一个 WorkBuddy / Claude-style <strong>Skill</strong>，也是一套可以脱离 AI 单独使用的命令行工具。</p>
+</blockquote>
+<p><strong>版本</strong> v1.0.0 · <strong>许可证</strong> MIT · <strong>作者</strong> 王梓铮 (charonpi) · <strong>实测环境</strong> UOS 20 arm64（内核 4.19）+ 阿里云 Debian 10.13 arm64</p>
+<hr />
+<h2>目录</h2>
+<ul>
+<li><a href="#这个技能解决什么问题">这个技能解决什么问题</a></li>
+<li><a href="#该不该用它30-秒判断">该不该用它：30 秒判断</a></li>
+<li><a href="#安装技能3-种方式">安装技能（3 种方式）</a></li>
+<li><a href="#5-分钟从零到-deb">5 分钟从零到 .deb</a></li>
+<li><a href="#目录结构">目录结构</a></li>
+<li><a href="#脚本与模板速查">脚本与模板速查</a></li>
+<li><a href="#可运行示例">可运行示例</a></li>
+<li><a href="#常见问题">常见问题</a></li>
+<li><a href="#上架技能市场">上架技能市场</a></li>
+<li><a href="#项目边界">项目边界</a></li>
+<li><a href="#反馈与贡献">反馈与贡献</a></li>
+</ul>
+<hr />
+<h2>这个技能解决什么问题</h2>
+<p>在 UOS 20 arm64 上打包 Python GUI 程序，最常见的结局是这三条死路：</p>
+<table>
+<thead>
+<tr>
+<th>尝试</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pip install PyQt6</code> 后把 Qt 运行库一起打进包</td>
+<td><code>libm.so.6: version 'GLIBC_2.29' not found</code> —— aarch64 wheel 标签写 <code>manylinux_2_28</code>，内部 Qt 实际链接 2.29</td>
+</tr>
+<tr>
+<td><code>pip install PySide6</code></td>
+<td>wheel 是 <code>manylinux_2_31</code>，要求 glibc 2.31</td>
+</tr>
+<tr>
+<td>用 PyQt6 ≤6.6 / PyQt5-Qt5 的 pip wheel</td>
+<td>官方没有 aarch64 Linux 轮子，<code>No matching distribution found</code></td>
+</tr>
+</tbody>
+</table>
+<p>UOS 20 的 glibc 恰好卡在 <strong>2.28</strong>：太低装不上新 wheel，太高又跑不了。本技能给出的唯一稳定解法是：</p>
+<pre><code>源码降级 PyQt6 → PyQt5（Python 3.7 兼容）
+        ↓
+纯 Python 依赖内置 third_party/ + sys.path 引导
+        ↓
+构建 Architecture: all 的 .deb（包内零二进制，不捆 Qt）
+        ↓
+目标机 apt 安装发行版自编译的 python3-pyqt5
+</code></pre>
+<p>因为包里全是文本与 <code>.py</code>，<strong>构建机架构和 glibc 都无关</strong>，交叉编译、sysroot、Qt 插件路径等一整类问题从根上消失。</p>
+<p>完整证据与兼容性矩阵见 <a href="uos-arm64-pyqt-packaging/references/compatibility-matrix.md"><code>uos-arm64-pyqt-packaging/references/compatibility-matrix.md</code></a>。</p>
+<hr />
+<h2>该不该用它：30 秒判断</h2>
+<table>
+<thead>
+<tr>
+<th>你的情况</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UOS 20 / Deepin 20 / 麒麟 V10，<strong>arm64，glibc 2.28</strong></td>
+<td>✅ 直接用</td>
+</tr>
+<tr>
+<td>目标机 x86_64</td>
+<td>❌ 用 PyInstaller / 常规 pip 方案更简单</td>
+</tr>
+<tr>
+<td>项目强依赖 Qt6 专属 API，无法降级到 PyQt5</td>
+<td>❌ 需要自行交叉编译 Qt，超出本技能范围</td>
+</tr>
+<tr>
+<td>目标机 glibc ≥ 2.31</td>
+<td>⚠️ 本方案仍可用，但可重新评估 PySide6 wheel 路线</td>
+</tr>
+<tr>
+<td>目标机 apt 仓库里<strong>没有</strong> <code>python3-pyqt5</code></td>
+<td>⛔ 外部前提，先修软件源，否则不要开始</td>
+</tr>
+<tr>
+<td>程序是纯 Python、不需要 Qt</td>
+<td>✅ 适用，把 <code>Depends</code> 改成 <code>python3 (&gt;= 3.7)</code> 即可</td>
+</tr>
+</tbody>
+</table>
+<p>一键自检：把 <code>scripts/preflight_uos.sh</code> 拷到目标机执行 <code>sh preflight_uos.sh</code>，看输出是不是 <code>READY</code>。</p>
+<hr />
+<h2>安装技能（3 种方式）</h2>
+<h3>方式 1：WorkBuddy 客户端上传（推荐，最省事）</h3>
+<ol>
+<li>下载 <a href="dist/uos-arm64-pyqt-packaging.zip"><code>dist/uos-arm64-pyqt-packaging.zip</code></a>（带顶层技能目录的标准包）。</li>
+<li>WorkBuddy 客户端 → <strong>技能 → 添加技能 → 上传技能</strong> → 选择该 zip → 启用。</li>
+<li>新开一个任务说：「帮我把这个 PyQt6 程序打包成 UOS 20 arm64 的 deb」，技能会按描述自动触发。</li>
+</ol>
+<h3>方式 2：手动放到技能目录</h3>
+<pre><code class="language-bash">git clone https://github.com/charonpi/uos-arm64-pyqt-packaging.git
+cp -r uos-arm64-pyqt-packaging/uos-arm64-pyqt-packaging ~/.workbuddy/skills/
+</code></pre>
+<p>Windows 对应 <code>C:\Users\&lt;用户名&gt;\.workbuddy\skills\</code>。项目级共享可放到 <code>&lt;项目&gt;/.workbuddy/skills/</code>。</p>
+<h3>方式 3：只用命令行，不装技能</h3>
+<p>克隆仓库后直接跑 <code>uos-arm64-pyqt-packaging/scripts/</code> 下的脚本，完全不依赖 AI：</p>
+<pre><code class="language-bash">python3 uos-arm64-pyqt-packaging/scripts/check_py37_compat.py ./your-app
+python3 uos-arm64-pyqt-packaging/scripts/build_deb.py --src ./your-app --pkg my-app --entry main.py --out ./dist
+</code></pre>
+<blockquote>
+<p><strong>两个 zip 的区别</strong>：<code>uos-arm64-pyqt-packaging.zip</code> 带顶层目录，给客户端「上传技能」用；<code>uos-arm64-pyqt-packaging-openplatform.zip</code> 是根目录直铺（<code>SKILL.md</code> 在 zip 根），给 WorkBuddy 开放平台提交审核用。详见 <a href="docs/PUBLISH.md"><code>docs/PUBLISH.md</code></a>。</p>
+</blockquote>
+<hr />
+<h2>5 分钟从零到 .deb</h2>
+<p>以下假设：你有一个 PyQt6 写的桌面程序，入口是 <code>myapp/main.py</code>，用到 openpyxl，目标是 UOS 20 arm64。</p>
+<h3>步骤 0 · 目标机自检（UOS 上执行）</h3>
+<pre><code class="language-bash">sh uos-arm64-pyqt-packaging/scripts/preflight_uos.sh
+sudo apt install -y python3-pyqt5 fonts-noto-cjk
+</code></pre>
+<h3>步骤 1 · 源码副本 + 自动迁移（任意开发机）</h3>
+<pre><code class="language-bash">cp -r myapp myapp-build                     # 永远在副本上操作
+S=uos-arm64-pyqt-packaging/scripts
+
+python3 $S/migrate_pyqt6_to_pyqt5.py myapp-build --dry-run     # 先看报告，逐行复核
+python3 $S/migrate_pyqt6_to_pyqt5.py myapp-build --apply --backup
+</code></pre>
+<p>脚本完成：PyQt6→PyQt5 导入、作用域枚举展平（<code>Qt.ItemFlag.X</code> → <code>Qt.X</code>）、<code>.exec()</code> → <code>.exec_()</code>、每个 <code>.py</code> 插入 <code>from __future__ import annotations</code>。<strong>注释和字符串里的文字不会被改</strong>。</p>
+<h3>步骤 2 · Python 3.7 兼容门禁（必须零 ERROR）</h3>
+<pre><code class="language-bash">python3 $S/check_py37_compat.py myapp-build
+# Scanned N file(s): 0 ERROR, 0 WARN  →  GATE PASSED
+</code></pre>
+<p>会报出运行时位置的 <code>list[str]</code> / <code>X | None</code>、3.8+ 语法与 3.8+ 标准库 API。修完再继续。</p>
+<h3>步骤 3 · 内置纯 Python 依赖</h3>
+<pre><code class="language-bash">python3 -m pip install --target=myapp-build/third_party openpyxl==3.1.2
+ls myapp-build/third_party | grep -E 'openpyxl|et_xmlfile'    # 两个都要有
+</code></pre>
+<p><code>openpyxl==3.1.2</code> 的 PyPI 元数据为 <code>requires_python &gt;=3.6</code>，分类器明确含 3.7。<strong>必须锁版本</strong>，否则高版本 Python 的构建机可能拉到要求 3.8+ 的新版。<code>et-xmlfile</code> 是它的运行时依赖，手工拷贝时最容易漏。</p>
+<h3>步骤 4 · 构建 .deb（Linux 构建机）</h3>
+<p>Debian 10 已 EOL，先修源（脚本会备份 <code>sources.list</code>、改 archive 源、注释 <code>buster-updates</code>、关闭 Release 有效期校验）：</p>
+<pre><code class="language-bash">sudo sh $S/fix_debian10_sources.sh
+python3 $S/build_deb.py \
+  --src myapp-build --pkg myapp --version 1.0.0 \
+  --entry main.py --app-name &quot;我的应用&quot; \
+  --maintainer &quot;Your Name &lt;you@example.com&gt;&quot; \
+  --description &quot;My PyQt5 desktop application&quot; \
+  --third-party myapp-build/third_party \
+  --out ./dist --inject-bootstrap
+</code></pre>
+<p>产出 <code>dist/myapp_1.0.0_all.deb</code> + <code>.sha256</code> + <code>build-report.json</code>。</p>
+<p>Windows 上没有 <code>dpkg-deb</code>，脚本会自动降级为生成 <code>dist/_staging_myapp/</code>，把这个目录传到 Linux 后一行命令收尾：</p>
+<pre><code class="language-bash">dpkg-deb --build --root-owner-group _staging_myapp myapp_1.0.0_all.deb
+</code></pre>
+<h3>步骤 5 · 目标机安装与验收</h3>
+<pre><code class="language-bash">sudo dpkg -i myapp_1.0.0_all.deb
+sudo apt install -f                 # 自动补齐 python3-pyqt5 依赖
+myapp                              # 终端先跑，能看真实报错
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>检查</th>
+<th>通过标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dpkg-deb -I myapp_1.0.0_all.deb</code></td>
+<td><code>Architecture: all</code>、Depends 含 <code>python3-pyqt5</code></td>
+</tr>
+<tr>
+<td><code>dpkg-deb -c myapp_1.0.0_all.deb \| grep '\.so'</code></td>
+<td><strong>无输出</strong>（包内零二进制）</td>
+</tr>
+<tr>
+<td><code>python3 -c 'import PyQt5.QtCore'</code></td>
+<td>成功</td>
+</tr>
+<tr>
+<td>终端 <code>myapp</code> / 桌面图标双击</td>
+<td>窗口正常，中文不方块</td>
+</tr>
+</tbody>
+</table>
+<p>排错速查见 <a href="uos-arm64-pyqt-packaging/references/troubleshooting.md"><code>references/troubleshooting.md</code></a>。</p>
+<hr />
+<h2>目录结构</h2>
+<pre><code>uos-arm64-pyqt-packaging/            ← GitHub 仓库根
+├── README.md                       ← 本文（完整中文说明）
+├── README.en.md                    ← 英文简介
+├── LICENSE                         ← MIT
+├── CHANGELOG.md
+├── docs/
+│   ├── PUBLISH.md                  ← 技能市场上架保姆级教程 + 展示文案
+│   └── guide.html                  ← 本文的自包含 HTML 离线阅读版
+├── uos-arm64-pyqt-packaging/       ← ★ 技能包本体（zip 的内容）
+│   ├── SKILL.md                    ← 技能定义（YAML frontmatter + 四阶段工作流）
+│   ├── README.md
+│   ├── references/                 ← 4 份按需加载的参考文档
+│   │   ├── compatibility-matrix.md
+│   │   ├── migration-guide.md
+│   │   ├── build-and-deploy.md
+│   │   └── troubleshooting.md
+│   ├── scripts/                    ← 5 个可直接运行的脚本
+│   │   ├── migrate_pyqt6_to_pyqt5.py
+│   │   ├── check_py37_compat.py
+│   │   ├── build_deb.py
+│   │   ├── preflight_uos.sh
+│   │   └── fix_debian10_sources.sh
+│   ├── templates/                  ← control / launcher / desktop / bootstrap 模板
+│   └── assets/icon-512.png         ← 512×512 市场图标（约 7 KB）
+├── examples/hello-pyqt5/           ← 迁移前 / 迁移后可运行示例
+├── tools/
+│   ├── make_icon.py                ← 重新生成图标
+│   └── make_release.py             ← 校验 + 生成两种 zip + SHA256
+└── dist/                           ← 构建产物（zip / sha256）
+</code></pre>
+<p>技能包严格保持<strong>两级目录</strong>（根 + 一级子目录），符合 WorkBuddy 开放平台对技能包结构的校验要求。</p>
+<hr />
+<h2>脚本与模板速查</h2>
+<table>
+<thead>
+<tr>
+<th>脚本</th>
+<th>关键参数</th>
+<th>作用</th>
+<th>运行位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>preflight_uos.sh</code></td>
+<td>无</td>
+<td>检查架构 / glibc / Python / <code>python3-pyqt5</code> / 中文字体 / 图形会话</td>
+<td><strong>目标 UOS 机</strong></td>
+</tr>
+<tr>
+<td><code>migrate_pyqt6_to_pyqt5.py</code></td>
+<td><code>&lt;src&gt;</code> <code>--dry-run</code> / <code>--apply --backup</code> <code>--exclude</code> <code>--report</code></td>
+<td>PyQt6→PyQt5 机械迁移，幂等，只改代码不改字符串注释</td>
+<td>任意开发机</td>
+</tr>
+<tr>
+<td><code>check_py37_compat.py</code></td>
+<td><code>&lt;src&gt;</code> <code>--json</code> <code>--strict</code></td>
+<td>Python 3.7 静态门禁，ERROR 时退出码 1</td>
+<td>任意开发机</td>
+</tr>
+<tr>
+<td><code>build_deb.py</code></td>
+<td><code>--src --pkg --version --entry --app-name --third-party --out --inject-bootstrap --staging-only</code></td>
+<td>参数化生成 <code>arch:all</code> deb / staging</td>
+<td>Linux 构建机（Windows 自动降级）</td>
+</tr>
+<tr>
+<td><code>fix_debian10_sources.sh</code></td>
+<td>无（需 root）</td>
+<td>修复 Debian 10 EOL 源、装构建依赖</td>
+<td><strong>构建机</strong>，不要跑在 UOS 上</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>模板</th>
+<th>占位符</th>
+<th>生成物</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>control.tpl</code></td>
+<td><code>PKG</code> <code>VERSION</code> <code>DEPENDS</code> <code>MAINTAINER</code> <code>DESCRIPTION</code></td>
+<td><code>DEBIAN/control</code></td>
+</tr>
+<tr>
+<td><code>launcher.tpl</code></td>
+<td><code>ENTRY_PATH</code></td>
+<td><code>/usr/bin/&lt;pkg&gt;</code></td>
+</tr>
+<tr>
+<td><code>desktop.tpl</code></td>
+<td><code>APP_NAME</code> <code>DESCRIPTION</code> <code>PKG</code></td>
+<td><code>/usr/share/applications/&lt;pkg&gt;.desktop</code></td>
+</tr>
+<tr>
+<td><code>bootstrap.py.tpl</code></td>
+<td>无</td>
+<td>入口文件顶部的 sys.path 引导</td>
+</tr>
+<tr>
+<td><code>build-config.example.json</code></td>
+<td>—</td>
+<td>参数示例（文档性质，不自动加载）</td>
+</tr>
+</tbody>
+</table>
+<p><code>build_deb.py</code> 会优先读取同级 <code>templates/</code> 下的模板，改模板即可定制，不用改 Python。</p>
+<hr />
+<h2>可运行示例</h2>
+<p><a href="examples/hello-pyqt5/"><code>examples/hello-pyqt5/</code></a> 里有迁移前 / 迁移后两个最小 GUI 程序，以及一条完整的复现命令链。Windows / macOS / Linux 上都能跑通迁移 + 检查 + 生成 staging，无需 UOS 实机：</p>
+<pre><code class="language-bash">mkdir -p /tmp/demo &amp;&amp; cp examples/hello-pyqt5/main_pyqt6.py /tmp/demo/main.py
+python3 uos-arm64-pyqt-packaging/scripts/migrate_pyqt6_to_pyqt5.py /tmp/demo --apply
+python3 uos-arm64-pyqt-packaging/scripts/check_py37_compat.py /tmp/demo
+python3 uos-arm64-pyqt-packaging/scripts/build_deb.py --src /tmp/demo \
+  --pkg hello-pyqt5 --entry main.py --out /tmp/demo-dist --inject-bootstrap
+</code></pre>
+<hr />
+<h2>常见问题</h2>
+<p><strong>Q：为什么要降级到 PyQt5，不能用 PyQt6？</strong>
+UOS 20 的 glibc 2.28 与官方 aarch64 wheel 不兼容，Qt 二进制加载不了。PyQt5 由发行版自己编译，天然匹配本机 glibc。详见兼容矩阵。</p>
+<p><strong>Q：构建机必须是 arm64 吗？</strong>
+不需要。产物是 <code>Architecture: all</code>，包内全是文本，任意 Linux（甚至 Windows 只生成 staging）都行。这是本方案最大的便利点。</p>
+<p><strong>Q：目标机一定要联网 / 能 apt 吗？</strong>
+必须能装 <code>python3-pyqt5</code>（一次即可）。这是唯一的外部前提，无法远程绕过；若 apt 仓库没有该包，先解决软件源或开发者模式。</p>
+<p><strong>Q：纯 Python 程序（不用 Qt）能用吗？</strong>
+能，把 <code>--depends</code> 改成 <code>python3 (&gt;= 3.7)</code>，其余流程不变。</p>
+<p><strong>Q：为什么 openpyxl 要锁 3.1.2？</strong>
+构建机 Python 版本通常高于目标机，不锁版本 pip 可能装到要求 3.8+ 的新包。3.1.2 的 <code>requires_python &gt;=3.6</code>，且分类器含 3.7，已核对 PyPI 元数据。</p>
+<p><strong>Q：双击图标没反应？</strong>
+先终端跑 <code>&lt;pkg&gt;</code> 看真实报错，再检查 UOS 开发者模式/安全策略、desktop 的 <code>Exec</code> 路径和 <code>Terminal=false</code>。见排错文档 A 组。</p>
+<p><strong>Q：怎么换成麒麟 / Deepin？</strong>
+只要 <code>preflight_uos.sh</code> 显示 aarch64 + glibc 2.28 且 apt 有 <code>python3-pyqt5</code>，流程一致。</p>
+<p><strong>Q：zip 里到底要不要顶层目录？</strong>
+两种规范并存：客户端「上传技能」用带顶层目录的包；开放平台提交用根目录直铺包。仓库 <code>dist/</code> 里两个都给了，用错会报「解析失败」，换另一个重试即可。</p>
+<hr />
+<h2>上架技能市场</h2>
+<p>完整步骤（含个人实名认证、市场展示文案、分类、512×512 图标、审核自查、版本递增规则）见 <a href="docs/PUBLISH.md"><code>docs/PUBLISH.md</code></a>。</p>
+<p>简版：登录 <a href="https://open.workbuddy.cn">open.workbuddy.cn</a> → 完成个人认证 → <strong>发布管理 → 技能</strong> → 上传 <code>dist/uos-arm64-pyqt-packaging-openplatform.zip</code> → 补齐展示信息（文案已在 PUBLISH.md 里写好可直接复制）→ 上传 <code>assets/icon-512.png</code> → 提交审核（约 7 个工作日）。</p>
+<blockquote>
+<p>实名认证、原创声明与提交审核必须由账号本人完成，任何自动化工具都不应代做这一步。</p>
+</blockquote>
+<hr />
+<h2>项目边界</h2>
+<p>本技能<strong>不做</strong>：Qt 交叉编译、Qt6 专属 API 兼容、签名/加固、付费发行配置、目标机软件源修复、非 Debian 系发行版（RPM / pacman）打包。</p>
+<p>本技能<strong>不承诺</strong>：目标机无法安装 <code>python3-pyqt5</code> 时程序能运行；源码无法降级到 PyQt5 时能打包。这两条属于外部前提，<code>SKILL.md</code> 要求 AI 在交付时明确告知，不夸大能力。</p>
+<hr />
+<h2>反馈与贡献</h2>
+<p>欢迎提 Issue / PR，尤其欢迎补充：新的实测兼容数据、<code>migrate_pyqt6_to_pyqt5.py</code> 的枚举作用域白名单、其它国产 arm64 发行版的 <code>preflight_uos.sh</code> 结果、排错文档里没覆盖的报错。</p>
+<p>提交前请跑：</p>
+<pre><code class="language-bash">python3 tools/make_release.py     # 校验 frontmatter / 目录层级 / 资源引用 / 图标，并重建两种 zip
+</code></pre>
+<p>许可证：MIT，见 <a href="LICENSE">LICENSE</a>。</p>
+</main>
+</body>
+</html>

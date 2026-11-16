@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>技能市场上架教程</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [], displayMath: [['$$', '$$']], processEscapes: false },
+  options: { ignoreHtmlClass: 'no-math' },
+  startup: { ready: () => { MathJax.startup.defaultReady(); } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+  :root {
+    --bg:#15171e; --bg2:#1b1e28; --card:#1f2330; --border:#2d3342;
+    --text:#d5d9e3; --text-dim:#9aa3b5;
+    --accent:#7aa2f7; --accent2:#9ece6a; --src:#565f89; --math:#bb9af7;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+    line-height:1.75; font-size:16px;
+  }
+  header.topbar {
+    position:sticky; top:0; z-index:10;
+    background:linear-gradient(90deg,#1b1e28,#232838);
+    border-bottom:1px solid var(--border);
+    padding:12px 24px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  }
+  header.topbar h1 { margin:0; font-size:17px; font-weight:600; color:#e8ebf4; letter-spacing:.5px; }
+  header.topbar .sub { color:var(--text-dim); font-size:13px; }
+  main { max-width:920px; margin:0 auto; padding:28px 24px 80px; }
+  h1 { font-size:26px; color:#e8ebf4; margin:36px 0 12px; }
+  h1:first-child { margin-top:8px; }
+  h2 { font-size:21px; color:var(--accent); border-left:4px solid var(--accent);
+       padding-left:12px; margin:42px 0 14px; }
+  h3 { font-size:17px; color:var(--accent2); margin:30px 0 10px; }
+  h4 { font-size:15.5px; color:#e0af68; margin:24px 0 8px; }
+  p { margin:10px 0; }
+  a { color:var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  blockquote { margin:12px 0; padding:10px 16px; background:var(--bg2);
+       border-left:3px solid var(--src); color:var(--text-dim); border-radius:0 8px 8px 0; }
+  hr { border:none; border-top:1px solid var(--border); margin:34px 0; }
+  p > strong:first-child { color:var(--src); font-size:13px; letter-spacing:.4px; }
+  table { border-collapse:collapse; width:100%; margin:14px 0; font-size:13.5px;
+       background:var(--card); border-radius:8px; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--border); padding:7px 10px; text-align:left; vertical-align:top; }
+  th { background:#262c3d; color:#c8d3f5; font-weight:600; white-space:nowrap; }
+  tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+  img { max-width:100%; height:auto; display:block; margin:14px auto;
+       border:1px solid var(--border); border-radius:10px; background:#fff;
+       padding:6px; box-shadow:0 4px 18px rgba(0,0,0,.35); }
+  mjx-container { color:var(--math) !important; margin:16px 0 !important; }
+  code { background:#262c3d; color:#7dcfff; padding:2px 6px; border-radius:4px; font-size:.92em; }
+  pre { background:#1f2330; padding:12px 14px; border-radius:8px; overflow-x:auto;
+       border:1px solid var(--border); }
+  pre code { background:none; padding:0; }
+  ul, ol { padding-left:26px; }
+  li { margin:4px 0; }
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-thumb { background:#333a4d; border-radius:5px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  @media (max-width:640px) { main{padding:18px 14px 60px;} body{font-size:15px;} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <h1>技能市场上架教程</h1>
+  <span class="sub">uos-arm64-pyqt-packaging v1.0.0</span>
+</header>
+<main>
+<h1>技能市场上架保姆级教程</h1>
+<blockquote>
+<p>面向 <code>uos-arm64-pyqt-packaging</code> v1.0.0。目标：在 <strong>WorkBuddy 开放平台</strong>提交技能，审核通过后出现在客户端「专家·技能·连接器 → 技能市场」，别人点「+」即可安装。</p>
+<p>⚠️ <strong>实名认证、原创声明、提交审核必须由账号本人完成</strong>。本文档把除此之外的所有材料都准备好了，按步骤大约 5 分钟。</p>
+</blockquote>
+<hr />
+<h2>0. 材料清单（本仓库已备齐）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>材料</th>
+<th>路径</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>开放平台提交用 zip（根目录直铺 <code>SKILL.md</code>）</td>
+<td><code>dist/uos-arm64-pyqt-packaging-openplatform.zip</code></td>
+<td>✅ 已生成</td>
+</tr>
+<tr>
+<td>2</td>
+<td>客户端上传用 zip（带顶层技能目录）</td>
+<td><code>dist/uos-arm64-pyqt-packaging.zip</code></td>
+<td>✅ 已生成（备用）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>512×512 市场图标（约 7 KB，远低于 500 KB 上限）</td>
+<td><code>uos-arm64-pyqt-packaging/assets/icon-512.png</code></td>
+<td>✅ 已生成</td>
+</tr>
+<tr>
+<td>4</td>
+<td>市场展示文案（中英、示例提示词、分类）</td>
+<td>本文第 3 节，可直接复制</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>5</td>
+<td>校验与哈希</td>
+<td><code>dist/SHA256SUMS.txt</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>6</td>
+<td>开发者实名认证</td>
+<td>本人：大陆二代身份证 + 实名手机号 + 邮箱 + 人脸核身</td>
+<td>⬜ 需本人</td>
+</tr>
+</tbody>
+</table>
+<p>生成/重建材料：</p>
+<pre><code class="language-bash">python3 tools/make_icon.py        # 需要时重新生成图标
+python3 tools/make_release.py     # 校验 frontmatter、目录层级、资源引用并重建两种 zip
+</code></pre>
+<hr />
+<h2>1. 为什么有两个 zip（务必先看）</h2>
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>文件</th>
+<th>zip 内结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>开放平台提交审核</strong></td>
+<td><code>uos-arm64-pyqt-packaging-openplatform.zip</code></td>
+<td><code>SKILL.md</code> 在 <strong>zip 根目录</strong>，<code>references/</code>、<code>scripts/</code>、<code>templates/</code>、<code>assets/</code> 为根下一级目录</td>
+</tr>
+<tr>
+<td>WorkBuddy 客户端「技能 → 添加技能 → 上传技能」</td>
+<td><code>uos-arm64-pyqt-packaging.zip</code></td>
+<td>顶层包一层 <code>uos-arm64-pyqt-packaging/</code> 目录</td>
+</tr>
+</tbody>
+</table>
+<p>官方开放平台文档展示的是带 <code>{skill-name}/</code> 的结构，而部分实操资料要求根目录直铺 <code>SKILL.md</code>。两套说法并存，因此本仓库<strong>两个都提供</strong>：</p>
+<ul>
+<li>提交开放平台时<strong>优先用 <code>-openplatform.zip</code></strong>；</li>
+<li>若提示「解析失败 / 找不到 SKILL.md」，换另一个 zip 重试（这是最常见、也是最容易自救的失败原因）；</li>
+<li>两个包的内容完全一致，仅目录层级不同，<code>tools/make_release.py</code> 保证同步生成。</li>
+</ul>
+<p>技能包内部严格<strong>只有两级目录</strong>（根 + 一级子目录），满足平台目录结构校验。</p>
+<hr />
+<h2>2. 提交步骤（照做即可）</h2>
+<h3>2.1 开发者认证（只需做一次）</h3>
+<ol>
+<li>浏览器打开 <a href="https://open.workbuddy.cn">https://open.workbuddy.cn</a>，用你的 WorkBuddy 账号登录。</li>
+<li>首次进入选择 <strong>个人认证</strong>（个人主体；企业/组织认证是另外两条路径）。</li>
+<li>按页面指引提交：大陆二代身份证、实名手机号、邮箱、人脸核身。</li>
+<li>认证通过后进入开放平台首页。</li>
+</ol>
+<blockquote>
+<p>个人认证是平台要求，材料只提交给平台，本仓库与技能包内<strong>不含任何个人信息或凭据</strong>。</p>
+</blockquote>
+<h3>2.2 创建技能</h3>
+<ol>
+<li>左侧导航 <strong>发布管理 → 技能</strong>。</li>
+<li>点击 <strong>发布技能 / 创建技能</strong> → <strong>配置技能</strong>。</li>
+<li><strong>上传压缩包</strong>：选 <code>dist/uos-arm64-pyqt-packaging-openplatform.zip</code>。</li>
+<li>平台自动开包解析并生成技能 ID。解析出的名称、描述等由 <code>SKILL.md</code> frontmatter 提供，核对无误后点「继续」。</li>
+</ol>
+<p>若解析失败，先按第 5 节自查，再换另一个 zip。</p>
+<h3>2.3 确认信息（文案见第 3 节）</h3>
+<p>按表单逐项填写：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>填什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>市场展示名称</td>
+<td><code>统信 UOS arm64 PyQt 打包助手</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>v1.0.0</code>（与 <code>SKILL.md</code> frontmatter 一致）</td>
+</tr>
+<tr>
+<td>市场展示分类</td>
+<td><strong>开发工具</strong>（可加 <strong>效率工具</strong>）</td>
+</tr>
+<tr>
+<td>服务类目</td>
+<td>工具 / 办公、开发工具（以下拉实际选项为准，1~5 个）</td>
+</tr>
+<tr>
+<td>头像</td>
+<td>上传 <code>uos-arm64-pyqt-packaging/assets/icon-512.png</code>（512×512，JPG/PNG，≤500 KB）</td>
+</tr>
+<tr>
+<td>简介 / 详细描述</td>
+<td>复制第 3 节文案</td>
+</tr>
+<tr>
+<td>推荐提示词 / 示例</td>
+<td>复制第 3 节 3 条示例</td>
+</tr>
+</tbody>
+</table>
+<p>技能市场的 9 个分类为：生活服务、开发工具、投资理财、内容创作、数据分析、效率工具、办公协同、商业运营、知识与学习。本技能最贴切的是 <strong>开发工具</strong>。</p>
+<h3>2.4 提交审核</h3>
+<ol>
+<li>勾选原创声明（「承诺本内容是本人独立原创」）。</li>
+<li>阅读并同意开发者规则 → <strong>提交审核</strong>。</li>
+<li>页面提示约 <strong>7 个工作日</strong>出结果（实测常快于此时长），结果通过站内通知告知。</li>
+<li>审核通过后自动上架技能市场；之后在客户端搜索技能名即可安装。</li>
+</ol>
+<blockquote>
+<p>提交前请确认已阅读第 4 节审核自查清单。提交后如需修改，<strong>必须递增 <code>version</code></strong> 并重新打包上传（<code>python3 tools/make_release.py</code>）。</p>
+</blockquote>
+<hr />
+<h2>3. 可直接复制的展示文案</h2>
+<h3>中文简介（一句话）</h3>
+<blockquote>
+<p>把 PyQt / 纯 Python 桌面应用打包成可在统信 UOS 20 arm64（glibc 2.28）上运行的 deb 安装包，自动完成 PyQt6→PyQt5 迁移、Python 3.7 兼容检查与 arch:all 构建。</p>
+</blockquote>
+<h3>详细描述（市场详情页）</h3>
+<pre><code>面向国产 arm64 桌面系统的 Python GUI 打包流水线。
+
+统信 UOS 20 的 glibc 停在 2.28，PyQt6 / PySide6 的 aarch64 官方 wheel 要么不存在，
+要么内部 Qt 实际链接 GLIBC_2.29，装上去必然报 libm.so.6: version `GLIBC_2.29' not found。
+本技能给出经过实机验证的稳定路线：源码降级到 PyQt5 并兼容系统 Python 3.7，
+纯 Python 依赖内置 third_party，构建 Architecture: all 的 .deb，
+运行时由发行版自编译的 python3-pyqt5 提供 Qt。
+
+内置 5 个可直接运行的脚本（源码迁移、3.7 兼容门禁、deb 构建、目标机自检、Debian 10 改源）、
+4 份参考文档（兼容矩阵、迁移指南、构建部署、排错速查）与可复制模板，
+既是 WorkBuddy 技能，也能脱离 AI 当命令行工具用。
+</code></pre>
+<h3>英文简介</h3>
+<blockquote>
+<p>End-to-end workflow to package PyQt / Python desktop apps as <code>Architecture: all</code> .deb installers for UOS 20 arm64 (glibc 2.28, Python 3.7): PyQt6→PyQt5 migration, static compatibility gate, vendored pure-Python dependencies, build and troubleshooting.</p>
+</blockquote>
+<h3>3 条示例提示词（中英成对）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>中文</th>
+<th>English</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>帮我把这个 PyQt6 程序打包成能在统信 UOS 20 arm64 上安装的 deb</td>
+<td>Package my PyQt6 app as a .deb for UOS 20 arm64</td>
+</tr>
+<tr>
+<td>2</td>
+<td>UOS 上启动报 GLIBC_2.29 not found，怎么修</td>
+<td>Fix GLIBC_2.29 not found on UOS arm64</td>
+</tr>
+<tr>
+<td>3</td>
+<td>检查一下这份源码有没有 Python 3.7 跑不了的语法</td>
+<td>Check whether my source is Python 3.7 compatible</td>
+</tr>
+</tbody>
+</table>
+<h3>标签建议</h3>
+<p><code>UOS</code> <code>arm64</code> <code>aarch64</code> <code>glibc-2.28</code> <code>PyQt5</code> <code>deb</code> <code>国产操作系统</code> <code>信创</code> <code>Python3.7</code> <code>交叉打包</code></p>
+<hr />
+<h2>4. 审核自查清单（提交前逐项打勾）</h2>
+<ul>
+<li>[ ] zip 解压后 <code>SKILL.md</code> 在根目录，且 YAML frontmatter 以 <code>---</code> 开头</li>
+<li>[ ] frontmatter 含 <code>name</code> / <code>description</code> / <code>description_zh</code> / <code>description_en</code> / <code>examples_zh</code> / <code>examples_en</code> / <code>version</code> / <code>author</code> / <code>agent_created</code></li>
+<li>[ ] <code>description</code> 中无 <code>&lt;</code> <code>&gt;</code> 尖括号（平台校验会拒）</li>
+<li>[ ] 中英文描述成对，示例提示词成对</li>
+<li>[ ] 版本号语义化 <code>1.0.0</code>，每次重新上传都递增</li>
+<li>[ ] 包内仅两级目录，无三级嵌套、无 <code>.pyc</code> / <code>.bak</code> / <code>.git</code> / <code>__pycache__</code></li>
+<li>[ ] <code>SKILL.md</code> 引用的 <code>scripts/</code> <code>references/</code> <code>templates/</code> <code>assets/</code> 文件全部存在（<code>make_release.py</code> 已校验）</li>
+<li>[ ] 图标 512×512 PNG，≤500 KB</li>
+<li>[ ] 包内无硬编码 Token、密钥、内部地址、个人绝对路径</li>
+<li>[ ] 描述直说「用户能完成什么」，不夸大能力；外部前提（<code>python3-pyqt5</code>）已写清</li>
+<li>[ ] 原创声明由本人勾选</li>
+</ul>
+<hr />
+<h2>5. 解析失败 / 被驳回时怎么自救</h2>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「解析失败 / 找不到 SKILL.md」</td>
+<td>换另一个 zip 重试（第 1 节）</td>
+</tr>
+<tr>
+<td>「目录层级不合规」</td>
+<td>确认用的是 <code>-openplatform.zip</code>；<code>tools/make_release.py</code> 已强制两级目录检查</td>
+</tr>
+<tr>
+<td>「描述含非法字符」</td>
+<td>检查 <code>description</code> 是否有 <code>&lt;</code> <code>&gt;</code>；改用中文全角括号</td>
+</tr>
+<tr>
+<td>「版本未变更」</td>
+<td>修改 <code>SKILL.md</code> 的 <code>version</code> 并重跑 <code>make_release.py</code></td>
+</tr>
+<tr>
+<td>「中英文字段缺失」</td>
+<td>对照第 4 节 frontmatter 清单补齐</td>
+</tr>
+<tr>
+<td>「图标不合规」</td>
+<td>用 <code>assets/icon-512.png</code>（512×512，PNG，约 7 KB）</td>
+</tr>
+<tr>
+<td>仍无法定位</td>
+<td>邮件 <code>openworkbuddy@tencent.com</code>，附 zip、<code>SHA256SUMS.txt</code> 与平台报错截图</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>6. 关于付费发布（可选，本次未启用）</h2>
+<p>平台支持一次性买断 / 按月订阅两种付费方式，但需要先满足三个条件：<strong>已完成开发者认证、账号无违规记录、至少有 1 个审核通过的技能或专家</strong>。满足后在「收入变现」开通收款账户、微信签约，重新发布时才能开启付费。</p>
+<p>本次提交按<strong>免费</strong>发布。若后续想改付费，注意：<strong>付费方式一经上架不可更改</strong>，且需重新走一次版本递增与审核。</p>
+<hr />
+<h2>7. 时间线与后续维护</h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>预期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>准备材料</td>
+<td>已完成（<code>dist/</code> 内）</td>
+</tr>
+<tr>
+<td>个人认证 + 表单提交</td>
+<td>约 5~15 分钟，本人操作</td>
+</tr>
+<tr>
+<td>平台审核</td>
+<td>约 7 个工作日，站内通知</td>
+</tr>
+<tr>
+<td>上架后</td>
+<td>客户端技能市场可搜索安装</td>
+</tr>
+<tr>
+<td>更新技能</td>
+<td>改内容 → 递增 <code>version</code> → <code>python3 tools/make_release.py</code> → 重新上传 → 重新审核</td>
+</tr>
+</tbody>
+</table>
+<p>维护提示：Qt / Riverbank 若后续发布真正兼容 glibc 2.28 的 aarch64 wheel，请先在目标机按 <code>references/compatibility-matrix.md</code> 第 4 节复核，再决定是否调整技能结论；不要凭旧经验外推。</p>
+</main>
+</body>
+</html>

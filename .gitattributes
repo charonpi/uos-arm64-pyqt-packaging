@@ -1,0 +1,15 @@
+* text=auto
+
+# Shell / Python / templates must stay LF: CRLF breaks `#!/bin/sh` on UOS.
+*.sh  text eol=lf
+*.py  text eol=lf
+*.tpl text eol=lf
+*.md  text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.txt text eol=lf
+
+# Release artifacts are binary and must never be line-converted.
+*.zip binary
+*.png binary
+*.deb binary

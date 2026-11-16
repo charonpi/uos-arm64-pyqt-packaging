@@ -1,0 +1,2 @@
+61ed31bc9b0bfadf94ab1cd118f05ac403867e3b15e751db471a5f03e40478c4  uos-arm64-pyqt-packaging.zip
+d0b5d08546962009b2348e1f048e769620b30b249305e56d17170cef40b409c2  uos-arm64-pyqt-packaging-openplatform.zip

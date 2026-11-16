@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+*.bak
+.DS_Store
+.idea/
+.vscode/
+
+# Local build / test scratch
+dist/_demo/
+dist/_demo-out/
+dist/_bad/
+dist/_staging_*/
+*.deb
+*.deb.sha256
+build-report.json
+
+# Keep release artifacts (zip / hashes / icon) tracked
+!dist/*.zip
+!dist/SHA256SUMS.txt
+!uos-arm64-pyqt-packaging/assets/*.png
+
+# Local validation artifacts
+dist/skill-creator-check/
+dist/original-SKILL.md.bak
