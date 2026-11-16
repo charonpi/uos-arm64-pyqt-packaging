@@ -70,7 +70,7 @@ UOS 20 的 glibc 恰好卡在 **2.28**：太低装不上新 wheel，太高又跑
 
 ### 方式 1：WorkBuddy 客户端上传（推荐，最省事）
 
-1. 下载 [`dist/uos-arm64-pyqt-packaging.zip`](dist/uos-arm64-pyqt-packaging.zip)（带顶层技能目录的标准包）。
+1. 下载 [`uos-arm64-pyqt-packaging.zip`](https://github.com/charonpi/uos-arm64-pyqt-packaging/releases/download/v1.0.0/uos-arm64-pyqt-packaging.zip)（v1.0.0 Release 直链；仓库 [`dist/`](dist/) 目录里也有同款文件）。
 2. WorkBuddy 客户端 → **技能 → 添加技能 → 上传技能** → 选择该 zip → 启用。
 3. 新开一个任务说：「帮我把这个 PyQt6 程序打包成 UOS 20 arm64 的 deb」，技能会按描述自动触发。
 
@@ -93,6 +93,8 @@ python3 uos-arm64-pyqt-packaging/scripts/build_deb.py --src ./your-app --pkg my-
 ```
 
 > **两个 zip 的区别**：`uos-arm64-pyqt-packaging.zip` 带顶层目录，给客户端「上传技能」用；`uos-arm64-pyqt-packaging-openplatform.zip` 是根目录直铺（`SKILL.md` 在 zip 根），给 WorkBuddy 开放平台提交审核用。详见 [`docs/PUBLISH.md`](docs/PUBLISH.md)。
+>
+> **一键下载**：[Releases v1.0.0](https://github.com/charonpi/uos-arm64-pyqt-packaging/releases/tag/v1.0.0) 页面直接附带两个 zip、512×512 图标和 `SHA256SUMS.txt`，不必克隆仓库。
 
 ---
 

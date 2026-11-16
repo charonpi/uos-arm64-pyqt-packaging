@@ -17,7 +17,7 @@ The reliable route used here:
 
 ## Install
 
-- WorkBuddy client: **Skills → Add skill → Upload skill** → pick `dist/uos-arm64-pyqt-packaging.zip`.
+- WorkBuddy client: **Skills → Add skill → Upload skill** → pick [`uos-arm64-pyqt-packaging.zip`](https://github.com/charonpi/uos-arm64-pyqt-packaging/releases/download/v1.0.0/uos-arm64-pyqt-packaging.zip) (Release v1.0.0 direct link; the same file also lives in `dist/`).
 - Manually: copy `uos-arm64-pyqt-packaging/` into `~/.workbuddy/skills/`.
 - CLI only: run the scripts in `uos-arm64-pyqt-packaging/scripts/` directly.
 

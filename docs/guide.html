@@ -172,7 +172,7 @@ window.MathJax = {
 <h2>安装技能（3 种方式）</h2>
 <h3>方式 1：WorkBuddy 客户端上传（推荐，最省事）</h3>
 <ol>
-<li>下载 <a href="dist/uos-arm64-pyqt-packaging.zip"><code>dist/uos-arm64-pyqt-packaging.zip</code></a>（带顶层技能目录的标准包）。</li>
+<li>下载 <a href="https://github.com/charonpi/uos-arm64-pyqt-packaging/releases/download/v1.0.0/uos-arm64-pyqt-packaging.zip"><code>uos-arm64-pyqt-packaging.zip</code></a>（v1.0.0 Release 直链；仓库 <a href="dist/"><code>dist/</code></a> 目录里也有同款文件）。</li>
 <li>WorkBuddy 客户端 → <strong>技能 → 添加技能 → 上传技能</strong> → 选择该 zip → 启用。</li>
 <li>新开一个任务说：「帮我把这个 PyQt6 程序打包成 UOS 20 arm64 的 deb」，技能会按描述自动触发。</li>
 </ol>
@@ -188,6 +188,7 @@ python3 uos-arm64-pyqt-packaging/scripts/build_deb.py --src ./your-app --pkg my-
 </code></pre>
 <blockquote>
 <p><strong>两个 zip 的区别</strong>：<code>uos-arm64-pyqt-packaging.zip</code> 带顶层目录，给客户端「上传技能」用；<code>uos-arm64-pyqt-packaging-openplatform.zip</code> 是根目录直铺（<code>SKILL.md</code> 在 zip 根），给 WorkBuddy 开放平台提交审核用。详见 <a href="docs/PUBLISH.md"><code>docs/PUBLISH.md</code></a>。</p>
+<p><strong>一键下载</strong>：<a href="https://github.com/charonpi/uos-arm64-pyqt-packaging/releases/tag/v1.0.0">Releases v1.0.0</a> 页面直接附带两个 zip、512×512 图标和 <code>SHA256SUMS.txt</code>，不必克隆仓库。</p>
 </blockquote>
 <hr />
 <h2>5 分钟从零到 .deb</h2>
